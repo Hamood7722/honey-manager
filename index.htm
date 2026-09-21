@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مدير العسل</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5e6a3 0%, #ffeb3b 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #f57f17;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #fff9c4 0%, #ffecb3 100%);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            border: 2px solid #ffca28;
+        }
+        
+        .stat-card h3 {
+            color: #f57f17;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+        }
+        
+        .stat-card p {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .section {
+            display: none;
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        nav button {
+            padding: 12px 25px;
+            background: #f57f17;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        nav button:hover, nav button.active {
+            background: #e65100;
+            transform: translateY(-2px);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #f57f17;
+            font-weight: bold;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ffca28;
+            border-radius: 10px;
+            font-size: 1em;
+        }
+        
+        button.action-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #f57f17 0%, #ff9800 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        
+        button.action-btn:hover {
+            transform: translateY(-3px);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: right;
+            border-bottom: 1px solid #ffecb3;
+        }
+        
+        th {
+            background: #fff9c4;
+            color: #f57f17;
+        }
+        
+        .delete {
+            background: #f44336;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .edit {
+            background: #2196F3;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🍯 مدير العسل</h1>
+        
+        <nav>
+            <button onclick="showSection('home')" class="active">الرئيسية</button>
+            <button onclick="showSection('add-product')">إضافة منتج</button>
+            <button onclick="showSection('add-purchase')">إضافة شراء</button>
+            <button onclick="showSection('add-sale')">إضافة بيع</button>
+        </nav>
+        
+        <!-- الرئيسية -->
+        <div id="home" class="section active">
+            <div class="stats">
+                <div class="stat-card">
+                    <h3>إجمالي المشتريات</h3>
+                    <p id="total-purchases">0 ر.س</p>
+                </div>
+                <div class="stat-card">
+                    <h3>إجمالي المبيعات</h3>
+                    <p id="total-sales">0 ر.س</p>
+                </div>
+                <div class="stat-card">
+                    <h3>الربح</h3>
+                    <p id="profit">0 ر.س</p>
+                </div>
+                <div class="stat-card">
+                    <h3>عدد المنتجات</h3>
+                    <p id="products-count">0</p>
+                </div>
+            </div>
+            
+            <h2 style="color: #f57f17; margin-bottom: 15px;">المنتجات</h2>
+            <table id="products-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>الاسم</th>
+                        <th>السعر</th>
+                        <th>إجراءات</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        
+        <!-- إضافة منتج -->
+        <div id="add-product" class="section">
+            <h2 style="color: #f57f17; margin-bottom: 20px;">إضافة منتج جديد</h2>
+            <div class="form-group">
+                <label>اسم المنتج</label>
+                <input type="text" id="product-name" placeholder="مثال: عسل سدر">
+            </div>
+            <div class="form-group">
+                <label>السعر (ريال)</label>
+                <input type="number" id="product-price" placeholder="مثال: 50">
+            </div>
+            <button class="action-btn" onclick="addProduct()">إضافة المنتج</button>
+        </div>
+        
+        <!-- إضافة شراء -->
+        <div id="add-purchase" class="section">
+            <h2 style="color: #f57f17; margin-bottom: 20px;">تسجيل شراء</h2>
+            <div class="form-group">
+                <label>اختر المنتج</label>
+                <select id="purchase-product"></select>
+            </div>
+            <div class="form-group">
+                <label>الكمية</label>
+                <input type="number" id="purchase-quantity" placeholder="مثال: 10">
+            </div>
+            <button class="action-btn" onclick="addPurchase()">تسجيل الشراء</button>
+        </div>
+        
+        <!-- إضافة بيع -->
+        <div id="add-sale" class="section">
+            <h2 style="color: #f57f17; margin-bottom: 20px;">تسجيل بيع</h2>
+            <div class="form-group">
+                <label>اختر المنتج</label>
+                <select id="sale-product"></select>
+            </div>
+            <div class="form-group">
+                <label>الكمية</label>
+                <input type="number" id="sale-quantity" placeholder="مثال: 5">
+            </div>
+            <button class="action-btn" onclick="addSale()">تسجيل البيع</button>
+        </div>
+    </div>
+    
+    <script src="./app.js"></script>
+</body>
+</html>
